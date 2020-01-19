@@ -8,4 +8,4 @@ This was a halloween project I did with my kids to see what was the most popular
 
 As you can see in the google sheet, we tracked the popularity of the candy, when it was chosen, number of trick-or-treaters within 5 minute intervals, and looked for trends. It was great to see the interest the kids had in this gadget and after 124 trick-or-treaters there was a clear preference for sour patch kids.
 
-Credit and thanks for how to link Python to google sheets goes to "Tech with Tim - Python Google Sheets API Tutorial - 2019" youtube video- https://www.youtube.com/watch?v=cnPlKLEGR7E&list=LLQ9okj1k2C-JgQ5nJuMXRaA&index=17&t=372s
+Credit and thanks for how to link Python to Google Sheets goes to "Tech with Tim - Python Google Sheets API Tutorial - 2019" youtube video- https://www.youtube.com/watch?v=cnPlKLEGR7E&list=LLQ9okj1k2C-JgQ5nJuMXRaA&index=17&t=372s
