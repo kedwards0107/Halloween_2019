@@ -1,163 +1,55 @@
 import gspread
-from pprint import pprint
 from oauth2client.service_account import ServiceAccountCredentials
 import time
 import datetime
 import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(22, GPIO.OUT)
-GPIO.output(22, GPIO.HIGH)
 
-# Sets up Google sheet to take input. Copied instructions from youtube video "Tech with Tim - Python Google Sheets API Tutorial - 2019" - https://www.youtube.com/watch?v=cnPlKLEGR7E&list=LLQ9okj1k2C-JgQ5nJuMXRaA&index=17&t=372s
+# GPIO setup
+def setup_gpio(pin, in_out, state=GPIO.HIGH, pull_up_down=None):
+    GPIO.setmode(GPIO.BCM)
+    if pull_up_down:
+        GPIO.setup(pin, in_out, pull_up_down=pull_up_down)
+    else:
+        GPIO.setup(pin, in_out)
+    GPIO.output(pin, state)
 
-scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+# Initialize GPIO pins
+setup_gpio(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+setup_gpio(22, GPIO.OUT)
 
+# Google Sheets setup
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
+         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
-
 client = gspread.authorize(creds)
+sheet = client.open("Halloween").sheet1
 
-sheet = client.open("Halloween").sheet1  # Open the spreadsheet
-data = sheet.get_all_records()  # Get a list of all records
-
-
-SleepTimeL = 0.2
-
-
-row = sheet.row_values(3)
-
-# while True statements look for button press (buttons connected to GPIO pins: 17,18,19,20) and if the button is pressed the code adds the row of data in the Google sheet then
-# activates GPIO pin connected to the relay (GPIO pins: 22, 5, 6, 13) which is connected to the LEDS. This codes blinks the LEDs on and off 6 times.
-
-try:
-        while True:
-                now = datetime.datetime.now()
-                now_format = now.strftime("%Y-%m-%d %H:%M:%S")
-                GPIO.setmode (GPIO.BCM)
-                GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                input_state = GPIO.input(17)
-                GPIO.setup(22, GPIO.OUT)
-                GPIO.output(22, GPIO.HIGH)
-                if input_state == False:
-                        insertRow = [now_format, "sour patch kids",1,0,0,0]
-                        sheet.insert_row(insertRow, 2)            
-                        GPIO.output(22, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(22, GPIO.LOW)
-                        GPIO.cleanup()
-                GPIO.setmode (GPIO.BCM)
-                GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                GPIO.setup(5, GPIO.OUT)
-                GPIO.output(5, GPIO.HIGH)
-                input_state = GPIO.input(18)
-                if input_state == False:
-                        insertRow = [now_format, "nerds",0,1,0,0]
-                        sheet.insert_row(insertRow, 2) 
-                        GPIO.output(5, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(5, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.cleanup()
-                GPIO.setmode (GPIO.BCM)
-                GPIO.setup(19, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                GPIO.setup(6, GPIO.OUT)
-                GPIO.output(6, GPIO.HIGH)
-                input_state = GPIO.input(19)
-                if input_state == False:
-                        insertRow = [now_format, "reeses pieces",0,0,1,0]
-                        sheet.insert_row(insertRow, 2) 
-                        GPIO.output(6, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(6, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.cleanup()
-                GPIO.setmode (GPIO.BCM)
-                GPIO.setup(20, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                GPIO.setup(13, GPIO.OUT)
-                GPIO.output(13, GPIO.HIGH)
-                input_state = GPIO.input(20)
-                if input_state == False:
-                        insertRow = [now_format, "twix",0,0,0,1]
-                        sheet.insert_row(insertRow, 2)
-                        GPIO.output(13, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.HIGH)
-                        time.sleep(SleepTimeL)
-                        GPIO.output(13, GPIO.LOW)
-                        time.sleep(SleepTimeL)
-                        GPIO.cleanup()
-except KeyboardInterrupt:
+# Blinking function
+def blink(pin, sleep_time, cleanup=False):
+    for _ in range(6):
+        GPIO.output(pin, GPIO.LOW)
+        time.sleep(sleep_time)
+        GPIO.output(pin, GPIO.HIGH)
+        time.sleep(sleep_time)
+    if cleanup:
         GPIO.cleanup()
-        print ("Done")
-  # Reset GPIO settings
 
+# Main loop
+try:
+    while True:
+        now_format = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        for button_pin, led_pin, candy_name in [(17, 22, "sour patch kids"), 
+                                                (18, 5, "nerds"),
+                                                (19, 6, "reeses pieces"),
+                                                (20, 13, "twix")]:
+            setup_gpio(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            setup_gpio(led_pin, GPIO.OUT)
+            if GPIO.input(button_pin) == False:
+                insertRow = [now_format, candy_name] + [int(name == candy_name) for name in ["sour patch kids", "nerds", "reeses pieces", "twix"]]
+                sheet.insert_row(insertRow, 2)
+                blink(led_pin, SleepTimeL, cleanup=True)
+
+except KeyboardInterrupt:
+    GPIO.cleanup()
+    print("Done")
