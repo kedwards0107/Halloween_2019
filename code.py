@@ -20,7 +20,7 @@ setup_gpio(22, GPIO.OUT)
 # Google Sheets setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
          "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope) #creds.json not saved on github for security
 client = gspread.authorize(creds)
 sheet = client.open("Halloween").sheet1
 
